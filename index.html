@@ -74,7 +74,7 @@ textarea{resize:none;}
 .ib.back svg{width:19px;height:19px;}
 
 #scroll{position:relative;z-index:1;height:100%;overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;
-  padding:calc(env(safe-area-inset-top) + 58px) 0 calc(env(safe-area-inset-bottom) + 48px);}
+  padding:calc(env(safe-area-inset-top) + 58px) 0 calc(env(safe-area-inset-bottom) + 14px);}
 .wrap{max-width:480px;margin:0 auto;padding:0 16px;}
 .pg{display:none;} .pg.on{display:block;animation:in .3s var(--spring);}
 @keyframes in{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
@@ -92,6 +92,7 @@ h1{font:700 34px/38px var(--font);letter-spacing:-.032em;margin:0;}
 .head .hr .today{min-height:32px;padding:0 13px;border-radius:999px;background:var(--fill-2);font:590 14px/18px var(--font);letter-spacing:-.02em;}
 
 .card{background:var(--fill);border-radius:22px;box-shadow:inset 0 0 0 1px var(--line);margin-bottom:12px;overflow:hidden;transition:box-shadow .4s,background .4s;}
+.pg > .card:last-child{margin-bottom:0;}
 @supports (corner-shape:squircle){ .card{border-radius:25px;corner-shape:squircle;} }
 .card.full{background:linear-gradient(180deg,rgba(48,209,88,.09),rgba(255,255,255,.045));box-shadow:inset 0 0 0 1px rgba(48,209,88,.26);}
 
