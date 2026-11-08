@@ -1034,7 +1034,8 @@ document.addEventListener("click",function(ev){
 show("hoy",true);
 if(S.active){openSes();}
 syncSteps(true);
-if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(function(r){r.update();}).catch(function(){});
+  var reloaded=false;navigator.serviceWorker.addEventListener("controllerchange",function(){if(!reloaded&&!S.active){reloaded=true;location.reload();}});});}
 })();
 </script>
 </body>
