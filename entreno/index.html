@@ -9,12 +9,14 @@
 <link rel="icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Entreno">
-<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: dark)">
 <style>
 :root{
-  color-scheme:dark;
+  color-scheme:light;
   --void:#000;
   --s1:#161617;
   --s2:#1F1F1F;
@@ -343,6 +345,93 @@ h1{font:600 34px/41px var(--font);letter-spacing:-.035em;}
 .hero,.ember{display:none;}
 .btn.d{background:rgba(255,59,48,.14);color:#FF6961;}
 #splash i{background:radial-gradient(50% 50% at 50% 50%,#fff 0%,rgba(220,225,255,.8) 8%,rgba(150,160,255,.35) 25%,rgba(120,130,255,.12) 45%,transparent 70%);}
+
+/* ═════ fondo blanco ═════ */
+:root{--void:#FFFFFF;--s1:#F6F6F7;--s2:#F0F0F2;--s3:#E4E4E7;--hair:rgba(0,0,0,.08);--ink:#0A0A0A;--mute:#8E8E93;--dim:#C7C7CC;}
+body{color:var(--ink);}
+#fade{background:linear-gradient(#fff 55%,rgba(255,255,255,0));}
+.glass,.tile,.blk,.list,.ex,.kpi div,.chart,.box,#rest{background:linear-gradient(180deg,#FAFAFB 0%,#F1F1F3 100%);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.06),inset 0 1px 0 #fff,0 1px 2px rgba(0,0,0,.03);}
+.ib{background:linear-gradient(180deg,#FAFAFB,#EFEFF1);box-shadow:inset 0 0 0 1px rgba(0,0,0,.07),inset 0 1px 0 #fff;color:#1C1C1E;}
+.tn{color:#0A0A0A;}
+.tv{color:#000;}
+.tic{color:#AEAEB2;}
+.tplay{background:#000;color:#fff;}
+.ring .rt{stroke:rgba(0,0,0,.1);}
+.ring .rp{stroke:#000;}
+.ring b{color:#000;}
+.tbar{background:rgba(0,0,0,.07);}
+.tbar i{background:#000;box-shadow:none;}
+.mo b{color:#3A3A3C;}
+.dots i{background:rgba(0,0,0,.1);}
+.dots i.fu{box-shadow:inset 0 0 0 1px rgba(0,0,0,.05);}
+.dots i.on{background:#000;box-shadow:0 0 4px rgba(0,0,0,.25);}
+.dots i.td{box-shadow:inset 0 0 0 1.5px #000;}
+.trow{border-top-color:rgba(0,0,0,.07);}
+.sep{background:rgba(0,0,0,.08);}
+.live-dot{background:#000;box-shadow:none;}
+#tabs{background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.07),0 10px 30px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);}
+#tabs button{color:#AEAEB2;}
+#tabs button.on{color:#000;filter:none;}
+.row+.row::before{background:rgba(0,0,0,.07);}
+button.row:active{background:#ECECEE;}
+.btn{background:#000;color:#fff;}
+.btn.s{background:#F0F0F2;color:#000;}
+.seg{background:#F0F0F2;}
+.seg .ind{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.seg button.on{color:#000;}
+.heat i{background:rgba(0,0,0,.1);}
+.heat i.on{background:#000;box-shadow:none;}
+.heat i.td{box-shadow:inset 0 0 0 1.5px #000;}
+.track{background:#E4E4E7;}
+.track i{background:#000;}
+/* entreno */
+.page{background:#fff;}
+.ph{background:linear-gradient(#fff 70%,rgba(255,255,255,0));}
+.exh .more{color:#8E8E93;}
+.sg input{background:rgba(0,0,0,.05);color:#000;}
+.sg input::placeholder{color:#C7C7CC;}
+.sg input:focus{background:#fff;box-shadow:0 0 0 1.5px #000 inset;}
+.ck{background:rgba(0,0,0,.05);color:#C7C7CC;}
+.sg.done .ck{background:#000;color:#fff;box-shadow:none;}
+.sg.done input{color:#8E8E93;}
+.ex.cur{box-shadow:inset 0 0 0 1.5px #000,0 1px 2px rgba(0,0,0,.04);}
+.exsteps .d{border-color:#C7C7CC;color:#fff;}
+.exsteps .d.on{background:#000;border-color:#000;}
+.exsteps .d.cur{border-color:#000;box-shadow:0 0 0 4px rgba(0,0,0,.06);}
+.exsteps .ln{background:#D1D1D6;}
+.exsteps .ln i{background:#000;}
+.rirbar button{background:#F0F0F2;color:#000;}
+.rirbar button.on{background:#000;color:#fff;}
+.del{color:#8E8E93;}
+/* cronómetro */
+#rest{background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.07),0 -10px 40px rgba(0,0,0,.08);}
+.rt-ticks i{background:rgba(0,0,0,.08);}
+.rt-ticks i.f{background:linear-gradient(180deg,#3A3A3C,#000);box-shadow:none;}
+.rt-ticks i.n{background:#000;}
+.rt-ticks i.o{background:#C7C7CC;}
+.rt-ticks i.t{box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.45);}
+.rt-scale span{color:#C7C7CC;}
+.rt-scale span.hit{color:#000;}
+.rt-time{color:#000;}
+#rest.over .rt-time{color:#8E8E93;}
+.rt-stop{background:rgba(0,0,0,.06);}
+.rt-stop i{background:#000;}
+.rt-adj button{background:#F0F0F2;color:#3A3A3C;}
+/* hoja */
+#scrim{background:rgba(0,0,0,.22);}
+#sheet{background:#fff;box-shadow:0 -10px 40px rgba(0,0,0,.12);}
+#sheet .gb{background:#D1D1D6;}
+.x{background:#F0F0F2;color:#8E8E93;}
+.steps-list li::before{background:#F0F0F2;}
+#island{color:#fff;}
+/* pantalla de inicio: el círculo rojo del icono */
+#splash{background:#fff;}
+#splash i{left:50%;top:46%;width:260px;height:260px;border-radius:50%;filter:blur(14px);transform:translate(-50%,-50%) scale(.3);
+  background:radial-gradient(circle,#FF1A1A 0%,#FF2A35 30%,rgba(255,80,100,.45) 55%,transparent 72%);animation:dot 1.2s var(--spring) forwards;}
+@keyframes dot{0%{opacity:0;transform:translate(-50%,-50%) scale(.3);}50%{opacity:1;}100%{opacity:1;transform:translate(-50%,-50%) scale(1);}}
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important;}#splash{display:none;}}
 </style>
 </head>
@@ -585,8 +674,8 @@ function rHoy(){
 }
 /* anillo fino con número dentro, como la referencia */
 function ring(n,of){var p=of?Math.min(1,n/of):.75,C=2*Math.PI*19;
-  return '<span class="ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="2"/>'
-    +(p>0?'<circle cx="22" cy="22" r="19" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-dasharray="'+(C*p).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 22 22)"/>':'')+'</svg><b>'+n+'</b></span>';}
+  return '<span class="ring"><svg viewBox="0 0 44 44"><circle class="rt" cx="22" cy="22" r="19" fill="none" stroke-width="2"/>'
+    +(p>0?'<circle class="rp" cx="22" cy="22" r="19" fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="'+(C*p).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 22 22)"/>':'')+'</svg><b>'+n+'</b></span>';}
 /* tres meses de puntos: brillan los días entrenados */
 function months(k){var now=new Date(),td=trainedDays(),today=dkey(now),h="";
   for(var m=k-1;m>=0;m--){var d0=new Date(now.getFullYear(),now.getMonth()-m,1),dim=new Date(d0.getFullYear(),d0.getMonth()+1,0).getDate(),off=(d0.getDay()+6)%7,cells="";
@@ -774,9 +863,9 @@ function exSheet(name){var pts=[],rows=[];
     var xy=pts.map(function(p,i){return [P+i*(W-2*P)/(pts.length-1),H-P-(p.v-mn)/(mx-mn)*(H-2*P)];});
     var line=xy.map(function(q,i){if(!i)return "M"+q[0].toFixed(1)+" "+q[1].toFixed(1);var pq=xy[i-1],cx=(pq[0]+q[0])/2;return "C"+cx.toFixed(1)+" "+pq[1].toFixed(1)+" "+cx.toFixed(1)+" "+q[1].toFixed(1)+" "+q[0].toFixed(1)+" "+q[1].toFixed(1);}).join("");
     var lq=xy[xy.length-1];
-    h+='<div class="chart"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><filter id="gl"><feGaussianBlur stdDeviation="5"/></filter></defs>'
-      +'<path d="'+line+' L'+lq[0]+' '+H+' L'+xy[0][0]+' '+H+'Z" fill="url(#gf)"/><path d="'+line+'" fill="none" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'
-      +'<circle cx="'+lq[0]+'" cy="'+lq[1]+'" r="10" fill="#FF2D1F" filter="url(#gl)"/><circle cx="'+lq[0]+'" cy="'+lq[1]+'" r="4.5" fill="#FF2D1F"/></svg></div>';}
+    h+='<div class="chart"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><filter id="gl"><feGaussianBlur stdDeviation="5"/></filter></defs>'
+      +'<path d="'+line+' L'+lq[0]+' '+H+' L'+xy[0][0]+' '+H+'Z" fill="url(#gf)"/><path d="'+line+'" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'
+      +'<circle cx="'+lq[0]+'" cy="'+lq[1]+'" r="10" fill="#000" opacity=".25" filter="url(#gl)"/><circle cx="'+lq[0]+'" cy="'+lq[1]+'" r="4.5" fill="#000"/></svg></div>';}
   h+='<div class="list">'+rows.reverse().map(function(r){return '<div class="row"><div class="grow"><div class="s">'+esc(cap1(DF_SHORT.format(new Date(r.t))))+'</div><div class="t" style="white-space:normal;font-size:16px">'+esc(setsTxt(r.sets))+'</div></div></div>';}).join("")+'</div>';
   sheet(name,h);
 }
