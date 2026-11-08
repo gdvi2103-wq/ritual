@@ -464,10 +464,10 @@ function rHoy(){
   // pasos
   var days=[],mx=goal;for(i=6;i>=0;i--){var d=new Date(now);d.setDate(d.getDate()-i);var k=dkey(d),v=S.steps[k]||0;mx=Math.max(mx,v);days.push({k:k,v:v,l:"LMXJVSD"[(d.getDay()+6)%7]});}
   var at=S.stepsAt[today];
-  h+='<div class="tile w"><div class="steps-top"><div><div class="lab">'+ic("steps")+'Pasos</div><div class="big" style="margin-top:14px">'+fmtInt(st)+'</div><div class="mini">de '+fmtInt(goal)+(at?' · '+ago(at):'')+'</div></div>'
+  h+='<div class="tile w"><div class="steps-top"><div><div class="lab">'+ic("steps")+'Pasos</div><div class="big" style="margin-top:14px">'+fmtInt(st)+'</div><div class="mini">de '+fmtInt(goal)+(at?' · '+ago(at):'')+(S.server?' · auto':'')+'</div></div>'
     +'<div class="redring">'+ring(96,11,p,"var(--red)","var(--well)",Math.round(p*100)+'%')+'</div></div>'
     +'<div class="bars">'+days.map(function(x){return '<div class="b'+(x.k===today?" td":"")+'"><i class="'+(x.v>=goal?"ok":"")+'" style="height:'+Math.max(5,x.v/mx*34)+'px"></i><span>'+x.l+'</span></div>';}).join("")+'</div>'
-    +'<div class="chips">'+(awaitSteps?'<button class="chip r" data-act="steps-paste">Pegar pasos</button>':'<button class="chip k" data-act="steps-sync">'+ic("sync")+'Actualizar</button>')
+    +'<div class="chips">'+(awaitSteps&&!S.server?'<button class="chip r" data-act="steps-paste">Pegar pasos</button>':'<button class="chip k" data-act="steps-sync">'+ic("sync")+'Actualizar</button>')
     +'<button class="chip" data-act="steps-edit">A mano</button></div></div>';
   // siguiente entreno
   var gym=S.routines.slice().sort(function(a,b){return lastDone(a.id)-lastDone(b.id);}),nx=gym[0];
@@ -658,13 +658,16 @@ function exSheet(name){var pts=[],rows=[];
 function settings(){
   var h='<div class="list"><div class="row"><div class="grow">Objetivo de pasos</div><input inputmode="numeric" id="set-goal" value="'+S.goal+'"></div>'
    +'<div class="row"><div class="grow">Descanso entre series (s)</div><input inputmode="numeric" id="set-rest" value="'+S.rest+'"></div></div>';
+  h+='<div class="cap">Pasos automáticos</div><div class="list"><div class="row" style="display:block"><div class="note" style="margin-bottom:6px">Dirección de tu servidor de pasos</div><input class="l" id="set-srv" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://entreno-pasos.….workers.dev/clave" value="'+esc(S.server||"")+'" style="width:100%;font-size:15px"></div>'
+   +'<button class="row" data-act="srv-test"><div class="grow" style="font-weight:600">Probar conexión</div><span class="note" id="srv-st">'+(S.server?(S.syncErr?"Error":"Conectado"):"Sin configurar")+'</span></button></div>'
+   +'<p class="foot">Con el servidor configurado, la app lee tus pasos sola al abrirla y cada minuto. Una automatización de Atajos los envía cada pocas horas.</p>';
   h+='<div class="cap">Conectar con Salud</div><div class="box">'
    +'<p class="note" style="margin:0 0 6px">Una web no puede leer Salud directamente. Con dos atajos de la app Atajos se conecta en un toque. Créalos una vez.</p>'
    +'<div class="h4" style="margin-top:12px">1 · Atajo «Pasos Entreno»</div><ol class="steps-list">'
    +'<li>Nuevo atajo → <b>Buscar muestras de salud</b>: tipo <b>Pasos</b>, fecha de inicio <b>es hoy</b>.</li>'
    +'<li><b>Calcular estadísticas</b> → <b>Suma</b>.</li>'
    +'<li><b>Redondear número</b>.</li>'
-   +'<li><b>Copiar al portapapeles</b>.</li>'
+   +'<li><b>Copiar al portapapeles</b>. Con servidor, en su lugar: <b>Obtener contenido de URL</b> → tu dirección, método <b>POST</b>, cuerpo <b>JSON</b> con la clave <b>pasos</b> = el número.</li>'
    +'<li>Nómbralo exactamente <b>Pasos Entreno</b>.</li></ol>'
    +'<p class="note">En Hoy toca «Actualizar», vuelve con «◀ Entreno» arriba a la izquierda y toca «Pegar pasos».</p>'
    +'<div class="h4" style="margin-top:14px">2 · Atajo «Entreno a Salud»</div><ol class="steps-list">'
@@ -676,6 +679,7 @@ function settings(){
   h+='<p class="foot">Tus datos se guardan solo en este iPhone. Exporta una copia de vez en cuando.</p>';
   sheet("Ajustes",h);
   $("set-goal").addEventListener("change",function(){var n=num(this.value);if(n>0){S.goal=Math.round(n);save();render();}});
+  $("set-srv").addEventListener("change",function(){var v=this.value.trim();S.server=/^https:\/\//.test(v)?v:"";save();syncSteps(true);});
   $("set-rest").addEventListener("change",function(){var n=num(this.value);if(n>0){S.rest=Math.round(n);save();}});
 }
 function exportData(){var json=JSON.stringify(S,null,1),name="entreno-"+dkey()+".json";
@@ -685,10 +689,19 @@ $("fin").addEventListener("change",function(){var f=this.files[0];if(!f)return;v
   rd.onload=function(){try{var o=JSON.parse(rd.result);if(!o||!o.routines)throw 0;S=o;if(!S.stepsAt)S.stepsAt={};save();closeSheet();render();toast("Copia importada");}catch(e){toast("Archivo no válido");}};rd.readAsText(f);this.value="";});
 
 /* ───────── pasos ───────── */
+var syncing=false,lastSync=0;
+function syncSteps(force){if(!S.server||syncing)return;if(!force&&Date.now()-lastSync<20000)return;syncing=true;
+  fetch(S.server,{cache:"no-store"}).then(function(r){if(!r.ok)throw r.status;return r.json();}).then(function(j){
+    lastSync=Date.now();S.syncErr=null;var p=j.pasos||{},chg=false;
+    Object.keys(p).forEach(function(k){if(S.steps[k]!==p[k]){S.steps[k]=p[k];chg=true;}});
+    if(j.actualizado&&p[dkey()]!=null){if(S.stepsAt[dkey()]!==j.actualizado)chg=true;S.stepsAt[dkey()]=j.actualizado;}
+    awaitSteps=false;save();if(chg&&tab==="hoy")rHoy();
+  }).catch(function(e){S.syncErr=String(e);}).then(function(){syncing=false;});}
+setInterval(function(){if(!document.hidden)syncSteps();},60000);
 function setSteps(n){var k=dkey();S.steps[k]=Math.round(n);S.stepsAt[k]=Date.now();save();awaitSteps=false;render();toast(fmtInt(n)+" pasos");}
 function stepsEdit(){var h='<div class="list"><div class="row"><div class="grow">Pasos de hoy</div><input inputmode="numeric" id="st-in" value="'+(S.steps[dkey()]||"")+'" placeholder="0"></div></div><div class="btns"><button class="btn" data-act="steps-save">Guardar</button></div>';
   sheet("Pasos",h);setTimeout(function(){var i=$("st-in");i&&i.focus();},350);}
-document.addEventListener("visibilitychange",function(){if(!document.hidden){if(tab==="hoy")rHoy();updTime();}});
+document.addEventListener("visibilitychange",function(){if(!document.hidden){if(tab==="hoy")rHoy();updTime();syncSteps(awaitSteps);}});
 
 /* ───────── páginas y hoja ───────── */
 function openPage(id){$(id).classList.add("on");}
@@ -785,6 +798,11 @@ document.addEventListener("click",function(ev){
     else stepsEdit();break;
   case "steps-edit":stepsEdit();break;
   case "steps-save":var v=num($("st-in").value);if(v!=null&&v>=0){setSteps(v);closeSheet();}break;
+  case "srv-test":var inp=$("set-srv");if(inp){var v2=inp.value.trim();S.server=/^https:\/\//.test(v2)?v2:"";save();}
+    if(!S.server){toast("Escribe la dirección primero");break;}
+    $("srv-st").textContent="Probando…";fetch(S.server,{cache:"no-store"}).then(function(r){if(!r.ok)throw r.status;return r.json();}).then(function(j){
+      var n=Object.keys(j.pasos||{}).length;$("srv-st").textContent="Conectado";toast(n?"Conectado · "+n+" días":"Conectado · aún sin pasos");syncSteps(true);
+    }).catch(function(e){$("srv-st").textContent="Error";toast(e===403?"Clave incorrecta":"No se pudo conectar");});break;
   case "export":exportData();break;
   case "import":$("fin").click();break;
   case "reset":if(confirm("Se borrará todo tu historial y volverán las rutinas iniciales. ¿Seguro?")){S=seed();save();closeSheet();render();toast("Restaurado");}break;
@@ -794,6 +812,7 @@ document.addEventListener("click",function(ev){
 /* ───────── arranque ───────── */
 render();
 if(S.active){openSes();}
+syncSteps(true);
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
 })();
 </script>
