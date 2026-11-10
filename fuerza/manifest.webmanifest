@@ -9,8 +9,8 @@
   "theme_color": "#2C3339",
   "lang": "es",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
-    {"src": "icon-180.png", "sizes": "180x180", "type": "image/png"}
+    {"src": "rojo-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "rojo-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "rojo-180.png", "sizes": "180x180", "type": "image/png"}
   ]
 }
